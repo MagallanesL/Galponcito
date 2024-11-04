@@ -1,20 +1,22 @@
+// pages/ShowProductAdmin.js
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseconfig';
+import ProductCategory from './ProductCategory/ProductCategory';
+import SearchBar from './SearchBar/SearchBar';
 import styles from './ShowProductAdmin.module.css';
 
-const Showproduct = () => {
+const ShowProductAdmin = () => {
   const [products, setProducts] = useState([]);
   const [editProductId, setEditProductId] = useState(null);
   const [editedProduct, setEditedProduct] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
 
   const productsCollection = collection(db, 'productos');
 
   const getProducts = async () => {
     const data = await getDocs(productsCollection);
-    setProducts(
-      data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-    );
+    setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
   useEffect(() => {
@@ -46,173 +48,47 @@ const Showproduct = () => {
     setProducts(products.filter((product) => product.id !== id));
   };
 
-  // Filtrar productos por categorías
-  const pizzas = products.filter(product => product.category === 'pizza');
-  const sandwiches = products.filter(product => product.category === 'sandwich');
+  // Filtrar productos según la categoría y el término de búsqueda
+  const filteredProducts = products.filter((product) => 
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const pizzas = filteredProducts.filter(product => product.category === 'pizza');
+  const sandwiches = filteredProducts.filter(product => product.category === 'sandwich');
 
   return (
     <div className={styles.productsContainer}>
       <h2 className={styles.productsTitle}>Lista de Productos</h2>
-      
-      {/* Sección para Pizzas */}
-      <h3 className={styles.categoryTitle}>Pizzas</h3>
-      <div className={styles.tableResponsive}>
-        <table className={`${styles.productsTable} table table-striped`}>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Descripción</th>
-              <th>Precio</th>
-              <th>Cantidad</th>
-              <th>Categoría</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pizzas.map((product) => (
-              <tr key={product.id}>
-                {editProductId === product.id ? (
-                  <>
-                    <td>
-                      <input 
-                        type="text" 
-                        name="name" 
-                        value={editedProduct.name} 
-                        onChange={handleInputChange} 
-                        className={styles.formControl}
-                      />
-                    </td>
-                    <td>
-                      <input 
-                        type="text" 
-                        name="description" 
-                        value={editedProduct.description} 
-                        onChange={handleInputChange} 
-                        className={styles.formControl}
-                      />
-                    </td>
-                    <td>
-                      <input 
-                        type="number" 
-                        name="price" 
-                        value={editedProduct.price} 
-                        onChange={handleInputChange} 
-                        className={styles.formControl}
-                      />
-                    </td>
-                    <td>
-                      <input 
-                        type="number" 
-                        name="quantity" 
-                        value={editedProduct.quantity} 
-                        onChange={handleInputChange} 
-                        className={styles.formControl}
-                      />
-                    </td>
-                    <td>
-                      <input 
-                        type="text" 
-                        name="category" 
-                        value={editedProduct.category} 
-                        onChange={handleInputChange} 
-                        className={styles.formControl}
-                      />
-                    </td>
-                    <td>
-                      <button 
-                        className={styles.btnSave} 
-                        onClick={() => handleSave(product.id)}
-                      >
-                        Guardar
-                      </button>
-                      <button 
-                        className={styles.btnCancel} 
-                        onClick={() => setEditProductId(null)}
-                      >
-                        Cancelar
-                      </button>
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td>{product.name}</td>
-                    <td>{product.description}</td>
-                    <td>${product.price}</td>
-                    <td>{product.quantity}</td>
-                    <td>{product.category}</td>
-                    <td>
-                      <button 
-                        className={styles.btnEdit} 
-                        onClick={() => handleEditClick(product)}
-                      >
-                        Editar
-                      </button>
-                      <button 
-                        className={styles.btnDelete} 
-                        onClick={() => handleDelete(product.id)}
-                      >
-                        Eliminar
-                      </button>
-                    </td>
-                  </>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
 
-      {/* Sección para Sandwiches */}
-      <h3 className={styles.categoryTitle}>Sandwiches</h3>
-      <div className={styles.tableResponsive}>
-        <table className={`${styles.productsTable} table table-striped`}>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Descripción</th>
-              <th>Precio</th>
-              <th>Cantidad</th>
-              <th>Categoría</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sandwiches.map((product) => (
-              <tr key={product.id}>
-                {editProductId === product.id ? (
-                  <>
-                    {/* Similar código de edición */}
-                  </>
-                ) : (
-                  <>
-                    <td>{product.name}</td>
-                    <td>{product.description}</td>
-                    <td>${product.price}</td>
-                    <td>{product.quantity}</td>
-                    <td>{product.category}</td>
-                    <td>
-                      <button 
-                        className={styles.btnEdit} 
-                        onClick={() => handleEditClick(product)}
-                      >
-                        Editar
-                      </button>
-                      <button 
-                        className={styles.btnDelete} 
-                        onClick={() => handleDelete(product.id)}
-                      >
-                        Eliminar
-                      </button>
-                    </td>
-                  </>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* Barra de búsqueda */}
+      <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+
+      {/* Categorías de productos */}
+      <ProductCategory
+        title="Pizzas"
+        products={pizzas}
+        editProductId={editProductId}
+        editedProduct={editedProduct}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
+        onInputChange={handleInputChange}
+        onSaveClick={handleSave}
+        onCancelClick={() => setEditProductId(null)}
+      />
+
+      <ProductCategory
+        title="Sandwiches"
+        products={sandwiches}
+        editProductId={editProductId}
+        editedProduct={editedProduct}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDelete}
+        onInputChange={handleInputChange}
+        onSaveClick={handleSave}
+        onCancelClick={() => setEditProductId(null)}
+      />
     </div>
   );
 };
 
-export default Showproduct;
+export default ShowProductAdmin;
