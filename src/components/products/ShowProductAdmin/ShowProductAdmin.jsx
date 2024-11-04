@@ -46,9 +46,16 @@ const Showproduct = () => {
     setProducts(products.filter((product) => product.id !== id));
   };
 
+  // Filtrar productos por categorías
+  const pizzas = products.filter(product => product.category === 'pizza');
+  const sandwiches = products.filter(product => product.category === 'sandwich');
+
   return (
     <div className={styles.productsContainer}>
       <h2 className={styles.productsTitle}>Lista de Productos</h2>
+      
+      {/* Sección para Pizzas */}
+      <h3 className={styles.categoryTitle}>Pizzas</h3>
       <div className={styles.tableResponsive}>
         <table className={`${styles.productsTable} table table-striped`}>
           <thead>
@@ -62,7 +69,7 @@ const Showproduct = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
+            {pizzas.map((product) => (
               <tr key={product.id}>
                 {editProductId === product.id ? (
                   <>
@@ -125,6 +132,56 @@ const Showproduct = () => {
                         Cancelar
                       </button>
                     </td>
+                  </>
+                ) : (
+                  <>
+                    <td>{product.name}</td>
+                    <td>{product.description}</td>
+                    <td>${product.price}</td>
+                    <td>{product.quantity}</td>
+                    <td>{product.category}</td>
+                    <td>
+                      <button 
+                        className={styles.btnEdit} 
+                        onClick={() => handleEditClick(product)}
+                      >
+                        Editar
+                      </button>
+                      <button 
+                        className={styles.btnDelete} 
+                        onClick={() => handleDelete(product.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Sección para Sandwiches */}
+      <h3 className={styles.categoryTitle}>Sandwiches</h3>
+      <div className={styles.tableResponsive}>
+        <table className={`${styles.productsTable} table table-striped`}>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+              <th>Categoría</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sandwiches.map((product) => (
+              <tr key={product.id}>
+                {editProductId === product.id ? (
+                  <>
+                    {/* Similar código de edición */}
                   </>
                 ) : (
                   <>

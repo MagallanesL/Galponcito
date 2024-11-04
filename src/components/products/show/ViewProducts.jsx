@@ -30,8 +30,6 @@ const ViewProducts = () => {
               <h3 className={styles.cardTitle}>{product.name}</h3>
               <p className={styles.cardDescription}>{product.description}</p>
               <p className={styles.cardPrice}>${product.price}</p>
-              <p className={styles.cardQuantity}>Cantidad: {product.quantity}</p>
-              <p className={styles.cardCategory}>Categoría: {product.category}</p>
               <button className={styles.btn}>Agregar al carrito</button>
             </div>
           </div>
