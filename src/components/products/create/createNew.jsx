@@ -1,36 +1,36 @@
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseconfig";
+import styles from './CreateNew.module.css';
 
 const CreateNew = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [category, setCategory] = useState("");  // Nuevo estado para la categoría
+  const [category, setCategory] = useState("");
 
   const productsCollection = collection(db, 'productos');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await addDoc(productsCollection, { 
-      name: name, 
-      description: description, 
+      name, 
+      description, 
       price: Number(price),  
       quantity: Number(quantity),
-      category: category  // Guardamos la categoría seleccionada
+      category
     });
     
-    // Limpiar los campos del formulario después de enviar
     setName("");
     setDescription("");
     setPrice("");
     setQuantity("");
-    setCategory("");  // Limpiamos la categoría también
+    setCategory("");
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <h2>Crear Nuevo Producto</h2>
       <form onSubmit={handleSubmit}>
         <div>

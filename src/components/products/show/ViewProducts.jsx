@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseconfig';
-import './ViewProducts.css'; // Asegúrate de importar el archivo CSS
+import styles from './ViewProducts.module.css';
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
@@ -20,19 +20,19 @@ const ViewProducts = () => {
   }, []);
 
   return (
-    <div className="products-container">
+    <div className={styles.productsContainer}>
       <h2>Lista de Productos</h2>
-      <div className="cards-container">
+      <div className={styles.cardsContainer}>
         {products.map((product) => (
-          <div className="card" key={product.id}>
-            <img src={product.imageURL} alt={product.name} className="card-image" />
-            <div className="card-content">
-              <h3 className="card-title">{product.name}</h3>
-              <p className="card-description">{product.description}</p>
-              <p className="card-price">${product.price}</p>
-              <p className="card-quantity">Cantidad: {product.quantity}</p>
-              <p className="card-category">Categoría: {product.category}</p>
-              <button className="btn">Agregar al carrito</button>
+          <div className={styles.card} key={product.id}>
+            <img src={product.imageURL} alt={product.name} className={styles.cardImage} />
+            <div className={styles.cardContent}>
+              <h3 className={styles.cardTitle}>{product.name}</h3>
+              <p className={styles.cardDescription}>{product.description}</p>
+              <p className={styles.cardPrice}>${product.price}</p>
+              <p className={styles.cardQuantity}>Cantidad: {product.quantity}</p>
+              <p className={styles.cardCategory}>Categoría: {product.category}</p>
+              <button className={styles.btn}>Agregar al carrito</button>
             </div>
           </div>
         ))}

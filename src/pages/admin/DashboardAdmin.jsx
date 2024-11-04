@@ -1,13 +1,11 @@
-import React from 'react'
-import Show from '../../components/products/show/ViewProducts'
 import CreateNew from '../../components/products/create/createNew'
-
+import ShowProductsAdmin from '../../components/products/ShowProductAdmin/ShowProductAdmin'
 
 const DashboardAdmin = () => {
   return (
     <div>
-        <Show/>
-        <CreateNew/>
+         <CreateNew/>
+         <ShowProductsAdmin/>
     </div>
   )
 }
