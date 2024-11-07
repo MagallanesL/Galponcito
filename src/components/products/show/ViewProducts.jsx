@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseconfig';
+import { CartContext } from '../../../context/dataContext';
 import styles from './ViewProducts.module.css';
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
+  const { addToCart } = useContext(CartContext);
 
   const productsCollection = collection(db, 'productos');
 
   const getProducts = async () => {
     const data = await getDocs(productsCollection);
-    setProducts(
-      data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-    );
+    setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
   useEffect(() => {
@@ -30,7 +30,9 @@ const ViewProducts = () => {
               <h3 className={styles.cardTitle}>{product.name}</h3>
               <p className={styles.cardDescription}>{product.description}</p>
               <p className={styles.cardPrice}>${product.price}</p>
-              <button className={styles.btn}>Agregar al carrito</button>
+              <button className={styles.btn} onClick={() => addToCart(product)}>
+                Agregar al carrito
+              </button>
             </div>
           </div>
         ))}

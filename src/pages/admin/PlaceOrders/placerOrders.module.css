@@ -1,0 +1,13 @@
+@media (max-width: 768px) {
+  .table th, .table td {
+    font-size: 12px;  /* Reducir tamaño de fuente */
+    padding: 8px;    /* Reducir espacio en celdas */
+  }
+  .table td {
+    display: block;
+    width: 100%;
+  }
+  .table thead {
+    display: none;  /* Ocultar encabezado en pantallas pequeñas */
+  }
+}
