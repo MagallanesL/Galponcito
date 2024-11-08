@@ -6,7 +6,7 @@ const DashboardAdmin = () => {
     <div>
       <Nav variant="tabs" defaultActiveKey="/nuevoproducto">
         <Nav.Item>
-          <Nav.Link as={NavLink} to="/nuevoproducto">Crear productos</Nav.Link>
+          <Nav.Link as={NavLink} to="/newproduct">Crear productos</Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link as={NavLink} to="/productcreated">Ver Productos</Nav.Link>
